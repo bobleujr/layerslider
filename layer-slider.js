@@ -6,7 +6,8 @@ L.Control.LayerSliderControl = L.Control.extend({
         minValue: -1,
         markers: null,
         range: false,
-        follow: false
+        follow: false,
+        keys: []
     },
 
     initialize: function (options) {
@@ -52,15 +53,15 @@ L.Control.LayerSliderControl = L.Control.extend({
 
         //If a layer has been provided: calculate the min and max values for the slider
         if (options.layers) {
-            var keys = Object.keys( options.layers )
+            options.keys = Object.keys( options.layers )
             // keys.each(function(i){
 
             // })
             // this._layers.eachLayer(function (layer) {
             if (options.minValue === -1) {
-                options.minValue = Math.min.apply( null, keys );
+                options.minValue = Math.min.apply( null, options.keys );
             }
-            options.maxValue = Math.max.apply( null, keys );
+            options.maxValue = Math.max.apply( null, options.keys );
                 // options.markers[layer._leaflet_id] = layer;
             // });
             this.options = options;
@@ -91,6 +92,15 @@ L.Control.LayerSliderControl = L.Control.extend({
             step: 1,
             slide: function (e, ui) {
                 var map = options.map;
+                console.log(e)
+                console.log(ui)
+                $.each(options.keys,function(i){
+                    options.layers[i+1].setOpacity(0);
+                })
+                options.layers[ui.value].setOpacity(1)
+
+
+
                 // if(!!options.markers[ui.value]) {
                 //     // If there is no time property, this line has to be removed (or exchanged with a different property)
                 //     if(_options.markers[ui.value].feature !== undefined) {
